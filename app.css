@@ -1,5 +1,3 @@
-#logout,
-#entrenos,
-#perfil {
-    display: none;
+.verMenu {
+    display: block !important;
 }

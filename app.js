@@ -7,7 +7,15 @@ function getAuthRedirect() {
 
 }
 
+function verMenu() {
 
+    alert("Entro a ver Menu")
+
+    $("#entrenos").addClass('verMenu');
+    $("#perfil").addClass('verMenu');
+    $("#logout").addClass('verMenu');
+    $("#login").hide();
+}
 
 // inicializar los datos 
 function inicializar(res) {
@@ -18,10 +26,8 @@ function inicializar(res) {
 
 
     // mostrar elementos del menu ocultos
-    document.getElementById('login').style.display = "none";
-    document.getElementById('logout').style.display = "block";
-    document.getElementById('entrenos').style.display = "block";
-    document.getElementById('perfil').style.display = "block";
+    $("#entrenos").show();
+    //  verMenu();
 
 
 }
@@ -48,13 +54,12 @@ function getTokenAccess() {
 
 function getEntrenos() {
 
-    let access_token = sessionStorage.getItem('access_token')
-
-    const url = `https://www.strava.com/api/v3/athlete/activities?token_access=` + access_token;
+    var access_token = sessionStorage.getItem('access_token')
+    alert(access_token)
+    const url = "https://www.strava.com/api/v3/athlete/activities?access_token=" + access_token;
 
     fetch(url, {
-        method: 'post',
-
+        method: 'get',
     }).then(function(response) {
         mostrarActividades(response);
     }).catch(function(error) {
@@ -63,14 +68,20 @@ function getEntrenos() {
 }
 
 function mostrarActividades(response) {
-    actividades = JSON.parse(response);
-    alert(actividades);
+    alert(response)
+    var actividades = response['Response'];
+    console.log(actividades)
 
+    actividades.forEach((entreno, index) => {
+
+        let filaActividad = `<div><b>Nombre</b>` + entreno.name + `</div>`;
+
+    });
 }
 
 function logout() {
 
-    let token = sessionStorage.getItem('token_access')
+    let token = sessionStorage.getItem('access_token')
 
     let url = "https://www.strava.com/oauth/deauthorize"
     fetch(url, {
@@ -80,13 +91,13 @@ function logout() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                'token_access': token
+                'access_token': token
             })
 
         }).then(function(response) {
 
         })
         .then(res => inicializar(res)).catch(function(error) {
-            alert("Ha ocurrido un error al desautorizar aplicacion");
+            alert("Ha ocurrido un error al desautorizar aplicacion" + error);
         });
 }
