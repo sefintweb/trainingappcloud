@@ -1,15 +1,24 @@
 const client_id = "72863";
 const client_secret = "ca47ee35232ee86a2e401da340323e42055456ea";
 
+const port = window.location.port;
+const protocol = window.location.protocol;
+var dominio = window.location.host;
+if (dominio == "localhost") {
+    dominio = dominio + "/trainingappcloud"
+}
+
+const redirectUri = "http://" + dominio
+
+console.log(redirectUri);
+
 // redireccion la app a la pagina de authorizacion de strava
 function getAuthRedirect() {
-    window.location.href = "https://www.strava.com/oauth/authorize?client_id=" + client_id + "&redirect_uri=http://localhost:5500/index.html&response_type=code&scope=activity:read_all";
+    window.location.href = "https://www.strava.com/oauth/authorize?client_id=" + client_id + "&redirect_uri=" + redirectUri + "&response_type=code&scope=activity:read_all";
 
 }
 
 function verMenu() {
-
-    alert("Entro a ver Menu")
 
     $("#entrenos").addClass('verMenu');
     $("#perfil").addClass('verMenu');
@@ -20,15 +29,10 @@ function verMenu() {
 // inicializar los datos 
 function inicializar(res) {
 
-
     sessionStorage.setItem('access_token', res.access_token) // para obtener las consultas de la api
     sessionStorage.setItem('datosiniciales', JSON.stringify(res))
 
-
-    // mostrar elementos del menu ocultos
-    $("#entrenos").show();
-    //  verMenu();
-
+    window.location.href = "http://" + dominio
 
 }
 
@@ -48,40 +52,50 @@ function getTokenAccess() {
         }).then(res => res.json())
         .then(res => inicializar(res))
         .catch(function(error) {
-            alert("Ha ocurrido un error al obtener acceso " + error)
+
+            $.notify("Ha ocurrido un error al obtener acceso de token " + error, "error");
+
         });
 }
 
 function getEntrenos() {
 
     var access_token = sessionStorage.getItem('access_token')
-    alert(access_token)
+        // alert(access_token)
     const url = "https://www.strava.com/api/v3/athlete/activities?access_token=" + access_token;
 
     fetch(url, {
         method: 'get',
-    }).then(function(response) {
-        mostrarActividades(response);
+    }).then(function(res) {
+        var actividades = res.json();
+
+        var nroAct = actividades.length;
+        for (let i = 0; i < nroAct; i++) {
+            let entreno = JSON.parse(actividades[i]);
+            console.log(entreno);
+            let filaActividad = `<div><b>Nombre</b>` + entreno.name + `</div><br>`;
+            $("#actividades").append(filaActividad)
+
+        }
     }).catch(function(error) {
-        alert("Ha ocurrido un error al obtener entrenos de strava " + error)
+
+        $.notify("Ha ocurrido un error al obtener entrenos de strava " + error, "error");
     });
+
+
 }
 
-function mostrarActividades(response) {
-    alert(response)
-    var actividades = response['Response'];
+function mostrarActividades(res) {
+
     console.log(actividades)
 
-    actividades.forEach((entreno, index) => {
 
-        let filaActividad = `<div><b>Nombre</b>` + entreno.name + `</div>`;
 
-    });
 }
 
 function logout() {
 
-    let token = sessionStorage.getItem('access_token')
+    var token = sessionStorage.getItem('access_token')
 
     let url = "https://www.strava.com/oauth/deauthorize"
     fetch(url, {
@@ -94,10 +108,11 @@ function logout() {
                 'access_token': token
             })
 
-        }).then(function(response) {
-
+        }).then(function(res) {
+            alert("Aplicacion desautorizada" + sucess);
         })
         .then(res => inicializar(res)).catch(function(error) {
-            alert("Ha ocurrido un error al desautorizar aplicacion" + error);
+
+            alert("Ha ocurrido un error al desautorizar aplicacion" + error, "error");
         });
 }
