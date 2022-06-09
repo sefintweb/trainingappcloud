@@ -19,23 +19,9 @@ function getAuthRedirect() {
 
 }
 
-function verMenu() {
 
-    $("#entrenos").addClass('verMenu');
-    $("#perfil").addClass('verMenu');
-    $("#logout").addClass('verMenu');
-    $("#login").hide();
-}
 
-// inicializar los datos 
-function inicializar(res) {
 
-    sessionStorage.setItem('access_token', res.access_token) // para obtener las consultas de la api
-    sessionStorage.setItem('datosiniciales', JSON.stringify(res))
-
-    window.location.href = "http://" + dominio
-
-}
 
 function getTokenAccess() {
 
@@ -51,7 +37,13 @@ function getTokenAccess() {
             }
 
         }).then(res => res.json())
-        .then(res => inicializar(res))
+        .then(function(res) {
+            sessionStorage.setItem('access_token', res.access_token) // para obtener las consultas de la api
+            sessionStorage.setItem('datosiniciales', JSON.stringify(res))
+
+            window.location.href = "http://" + dominio
+
+        })
         .catch(function(error) {
 
             $.notify("Ha ocurrido un error al obtener acceso de token " + error, "error");
@@ -80,6 +72,7 @@ function imagenSport(sport) {
 function getEntrenos() {
 
     $("#actividades").empty();
+
 
     var access_token = sessionStorage.getItem('access_token')
         // alert(access_token)
@@ -115,7 +108,10 @@ function getEntrenos() {
                                             
                                                 <div class="alert-success card-header card-header-activity  ">
                                                   <center> <b>` + tipo + `</b><img src="` + img + `" class="imgSport"/><br>
-                                                  <b>Lunes 01/01/2022</b><button class="btn btn-sm btn-info" onclick="getEntrenoId(` + id + `)">Ver</button>
+                                                  <b>Lunes 01/01/2022</b>
+                                                  <button type="button" class="btn-sm btn-info "                 data-toggle="modal" data-target="#exampleModal"        onclick="getEntrenoId(` + id + `)">
+                                                         Ver
+                                                     </button>                                                 
                                                   </center>                                                   
                                                 </div>
                                                              
@@ -132,7 +128,10 @@ function getEntrenos() {
 
         }
 
-
+        $("#entrenos").show();
+        $("#perfil").show()
+        $("#logout").show();
+        $("#login").hide();
     }).catch(function(error) {
 
         $.notify("Ha ocurrido un error al obtener entrenos de strava " + error, "error");

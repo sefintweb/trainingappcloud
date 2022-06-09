@@ -30,17 +30,16 @@
 
         if (auth_token == null || auth_token == "") {
             getTokenUrl();
-
+            getEntrenos();
 
         } else {
+            getEntrenos();
 
-            verMenu();
         }
 
         function getTokenUrl() {
             var urlparams = location.search;
             if (urlparams != undefined && urlparams != null) {
-
                 let auth_token = urlparams.split("&")[1].slice(5);
                 sessionStorage.setItem('auth_token', auth_token);
                 getTokenAccess();
@@ -54,29 +53,57 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+
+    <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">TrainingAppCloud</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarID" aria-controls="navbarID" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarID">
-                <div class="navbar-nav">
-                    <a id="inicio" class="nav-link active" aria-current="page" href="/index.html">Inicio</a>
-                    <a id="entrenos" class="nav-link " aria-current="page" href="#" onclick="getEntrenos();">Entrenos</a>
-                    <a id="perfil" class="nav-link " aria-current="page" href="#" onclick="getPerfil();" style="display:none">Perfil</a>
-                    <a id="login" class="nav-link " aria-current="page" href="#" onclick="getAuthRedirect();">Login
-                        Strava</a>
-                    <a id="logout" class="nav-link " aria-current="page" href="#" onclick="logout();" style="display:none">Logout</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <a class="navbar-brand" href="#">TrainingAppCloud</a>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="entrenos" class="nav-link" href="#" onclick="getEntrenos(); " style="display: none ;">Entrenos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="perfil" class="nav-link" href="#" onclick="getPerfil();" style="display:none">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="login" class="nav-link" href="#" onclick="getAuthRedirect();">Login Strava</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a id="logout" class="nav-link" href="#" style="display: none">Salir</a>
+                    </li>
+                    <!--  <li class="nav-item">
+                        <a class="nav-link disabled">Disabled</a>
+                    </li> -->
+                </ul>
+
+                <!--  <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form> -->
+                <div id="atleta" class="bienvenida" style="margin-right:20% !important;color:white">
 
                 </div>
             </div>
         </div>
     </nav>
 
-    <div id="actividades" class=" actividades col-xs-12 col-sm-12 col-md-12 col-lg-12 row">
 
+    <div class="container">
+        <div id="actividades" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row">
+
+        </div>
     </div>
+
+
+    <!-- Button trigger modal -->
+
 
 
 
