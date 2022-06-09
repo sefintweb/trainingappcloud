@@ -14,15 +14,14 @@ console.log(redirectUri);
 
 // redireccion la app a la pagina de authorizacion de strava
 function getAuthRedirect() {
-    sessionStorage.clear();
+
     window.location.href = "https://www.strava.com/oauth/authorize?client_id=" + client_id + "&redirect_uri=" + redirectUri + "&response_type=code&scope=activity:read_all";
 
 }
 
 
 
-
-
+// obetener el token de acceso
 function getTokenAccess() {
 
     let auth_token = sessionStorage.getItem('auth_token');
@@ -40,7 +39,6 @@ function getTokenAccess() {
         .then(function(res) {
             sessionStorage.setItem('access_token', res.access_token) // para obtener las consultas de la api
             sessionStorage.setItem('datosiniciales', JSON.stringify(res))
-
             window.location.href = "http://" + dominio
 
         })
@@ -49,6 +47,18 @@ function getTokenAccess() {
             $.notify("Ha ocurrido un error al obtener acceso de token " + error, "error");
 
         });
+}
+
+function login() {
+
+    let auth_token = sessionStorage.getItem('auth_token');
+
+    if (auth_token == "" || auth_token == null || auth_token == undefined) {
+        getAuthRedirect();
+    }
+
+
+
 }
 
 function imagenSport(sport) {
@@ -128,10 +138,7 @@ function getEntrenos() {
 
         }
 
-        $("#entrenos").show();
-        $("#perfil").show()
-        $("#logout").show();
-        $("#login").hide();
+
     }).catch(function(error) {
 
         $.notify("Ha ocurrido un error al obtener entrenos de strava " + error, "error");
@@ -153,7 +160,7 @@ function getEntrenoId(Id) {
 
     }).then(res => res.json()).then(function(resp) {
 
-        alert(resp);
+
 
     }).catch(function(error) {
         $.notify("Ha ocurrido un error al obtener el entreno" + error, "error")
@@ -167,7 +174,7 @@ function logout() {
 
     var token = sessionStorage.getItem('access_token')
 
-    let url = "https://www.strava.com/oauth/deauthorize?access_token=" + access_token;
+    let url = "https://www.strava.com/oauth/deauthorize?access_token=" + token;
     fetch(url, {
             method: 'post',
             headers: {
@@ -176,11 +183,23 @@ function logout() {
             },
 
 
-        }).then(function(res) {
-            alert("Aplicacion desautorizada" + sucess);
-        })
-        .then(res => inicializar(res)).catch(function(error) {
+        }).then(res => res.json())
+        .then(function(res) {
 
+            $("#login").show();
+            $("#logout").hide();
+            $("#entrenos").hide()
+            $("#perfil").hide()
+            sessionStorage.clear();
+            $.notify("Sesion finalizada", "success")
+
+
+        }).catch(function(error) {
             alert("Ha ocurrido un error al desautorizar aplicacion" + error, "error");
         });
+
+    $("#home").click();
+
+
+
 }

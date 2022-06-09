@@ -25,29 +25,31 @@
 
 
     <script>
-        var auth_token = sessionStorage.getItem('auth_token');
-        // alert(auth_token);
+        $(function() {
 
-        if (auth_token == null || auth_token == "") {
-            getTokenUrl();
-            getEntrenos();
+            access_token = sessionStorage.getItem('access_token');
+            var auth_token = sessionStorage.getItem('auth_token');
 
-        } else {
-            getEntrenos();
-
-        }
-
-        function getTokenUrl() {
             var urlparams = location.search;
-            if (urlparams != undefined && urlparams != null) {
+
+            if (urlparams != undefined && urlparams != null && urlparams != "") {
                 let auth_token = urlparams.split("&")[1].slice(5);
                 sessionStorage.setItem('auth_token', auth_token);
                 getTokenAccess();
+
+
             }
+            if (access_token != null) {
 
-        }
+                $("#login").hide()
+                $("#entrenos").show()
+                $("#perfil").show()
+                $("#logout").show()
+
+
+            }
+        })
     </script>
-
 
 </head>
 
@@ -63,7 +65,7 @@
                 <a class="navbar-brand" href="#">TrainingAppCloud</a>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/index.html">Home</a>
                     </li>
                     <li class="nav-item">
                         <a id="entrenos" class="nav-link" href="#" onclick="getEntrenos(); " style="display: none ;">Entrenos</a>
@@ -72,11 +74,11 @@
                         <a id="perfil" class="nav-link" href="#" onclick="getPerfil();" style="display:none">Perfil</a>
                     </li>
                     <li class="nav-item">
-                        <a id="login" class="nav-link" href="#" onclick="getAuthRedirect();">Login Strava</a>
+                        <a id="login" class="nav-link" href="#" onclick="login();">Login Strava</a>
                     </li>
 
                     <li class="nav-item">
-                        <a id="logout" class="nav-link" href="#" style="display: none">Salir</a>
+                        <a id="logout" class="nav-link" href="#" style="display: none" onclick="logout();">Salir</a>
                     </li>
                     <!--  <li class="nav-item">
                         <a class="nav-link disabled">Disabled</a>
