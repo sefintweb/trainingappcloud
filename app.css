@@ -1,3 +1,22 @@
 .verMenu {
     display: block !important;
 }
+
+.card-header-activity {
+    border-radius: 6px;
+    font-size: 16px !important;
+    box-shadow: black 0 0 1px 1px;
+    margin-top: 10px !important;
+    text-align: center;
+}
+
+card-sport {
+    height: 250px;
+    font-size: 12px;
+}
+
+.imgSport {
+    height: 50px;
+    width: 50px;
+    border-radius: 3px;
+}
