@@ -28,21 +28,21 @@ function getTokenAccess() {
     const url = 'https://www.strava.com/oauth/token?client_id=' + client_id + '&client_secret=' + client_secret + '&code=' + auth_token + '&grant_type=authorization_code';
 
     fetch(url, {
-            method: 'post',
-            // mode: 'no-cors',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            }
+        method: 'post',
+        // mode: 'no-cors',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
 
-        }).then(res => res.json())
-        .then(function(res) {
+    }).then(res => res.json())
+        .then(function (res) {
             sessionStorage.setItem('access_token', res.access_token) // para obtener las consultas de la api
             sessionStorage.setItem('datosiniciales', JSON.stringify(res))
             window.location.href = "http://" + dominio
 
         })
-        .catch(function(error) {
+        .catch(function (error) {
 
             $.notify("Ha ocurrido un error al obtener acceso de token " + error, "error");
 
@@ -85,7 +85,7 @@ function getEntrenos() {
 
 
     var access_token = sessionStorage.getItem('access_token')
-        // alert(access_token)
+    // alert(access_token)
     const url = "https://www.strava.com/api/v3/athlete/activities?page=1&per_page=18&access_token=" + access_token;
 
     fetch(url, {
@@ -94,7 +94,7 @@ function getEntrenos() {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }
-    }).then(res => res.json()).then(function(res) {
+    }).then(res => res.json()).then(function (res) {
 
         var entrenos = res;
 
@@ -114,32 +114,49 @@ function getEntrenos() {
                 vel = vel.toFixed(2)
                 var tipo = entreno.type;
                 var img = imagenSport(tipo)
-                let filaActividad = `<div class="card card-sport alert-info  col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                let fecha = entreno.start_date;
+                let potencia = entreno.average_watts;
+                let fcmedia = entreno.average_heartrate;
+                let fcmax = entreno.max_heartrate;
+
+                if (fecha != null && fecha != "") {
+                    fecha = fecha.substr(0, 10);
+                    fecha = moment(fecha, 'YYYY-MM-DD').format('DD/MM/YYYY');
+
+                }
+
+                if(potencia==null){
+                    potencia=0;
+                }
+                let filaActividad = `<div class="card card-sport alert-info  col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                             
-                                                <div class="alert-success card-header card-header-activity  ">
-                                                  <center> <b>` + tipo + `</b><img src="` + img + `" class="imgSport"/><br>
-                                                  <b>Lunes 01/01/2022</b>
-                                                  <button type="button" class="btn-sm btn-info "                 data-toggle="modal" data-target="#exampleModal"        onclick="getEntrenoId(` + id + `)">
+                                                <div class="alert-success card-header card-header-activity">
+                                                  <center><img src="` + img + `" class="imgSport"/><b>` + tipo + `</b></center>
+                                                  <center><b>`+ fecha + `</b></center>
+                                                  <button type="button" class="btn btn-sm btn-light " style="float: right" onclick="getEntrenoId(` + id + `)">
                                                          Ver
-                                                     </button>                                                 
-                                                  </center>                                                   
+                                                  </button>                                                 
+                                                                                                    
                                                 </div>
                                                              
                                                <center><div class="card-body">
                                                 <b>` + entreno.name + `</b><br>
-                                                <b>` + distancia + `</b>km<br>
-                                                <b>` + tiempo + `</b>min<br> 
-                                                <b>` + vel + `</b>km/h<br>                
+                                                <b>` + distancia + `</b>km
+                                                <b>` + tiempo + `</b>min 
+                                                <b>` + vel + `</b>km/h 
+                                                <b>` + potencia + `</b>w 
+                                                <b>Fcmedia:</b>`+ fcmedia + ` bpm<b> Fcmax:</b>` + fcmax + ` bpm
+
                                                 </div></center>
                 
-                </div>`;
+                </div><hr>`;
                 $("#actividades").append(filaActividad)
             });
 
         }
 
 
-    }).catch(function(error) {
+    }).catch(function (error) {
 
         $.notify("Ha ocurrido un error al obtener entrenos de strava " + error, "error");
     });
@@ -149,6 +166,8 @@ function getEntrenos() {
 
 function getEntrenoId(Id) {
     var access_token = sessionStorage.getItem('access_token')
+
+    $("#actividad").empty();
     var url = "https://www.strava.com/api/v3/activities/" + Id + "?access_token=" + access_token;;
 
     fetch(url, {
@@ -158,11 +177,128 @@ function getEntrenoId(Id) {
             'Content-Type': 'application/json'
         },
 
-    }).then(res => res.json()).then(function(resp) {
+    }).then(res => res.json()).then(function (resp) {
 
+        var entreno = resp;
 
+        var name = entreno.name;
+        var type = entreno.type;
+        var imgSport = imagenSport(type);
+        var description = entreno.description;
+        if(description==null){
+            description="Sin descripcion";
+        }
+        var fecha = entreno.start_date_local;
+        var hora;
 
-    }).catch(function(error) {
+        var distancia = entreno.distance / 1000;
+        distancia = distancia.toFixed(2)
+        
+        var tiempototal = entreno.elapsed_time / 60;
+        tiempototal = tiempototal.toFixed(2)
+
+        var tiempomovi = entreno.moving_time / 60;
+        tiempomovi = tiempomovi.toFixed(2)
+        
+        
+        var velmedia = entreno.average_speed * 3.6;
+        velmedia = velmedia.toFixed(2)
+
+        var velmax = entreno.max_speed * 3.6;
+        velmax = velmax.toFixed(2)
+
+        var calories = entreno.calories;        
+        let potencia = entreno.average_watts;
+        let fcmedia = entreno.average_heartrate;
+        let fcmax = entreno.max_heartrate;
+        
+        let elev_max = entreno.elev_high;
+        let elev_min =entreno.elev_low;
+        if(elev_max==null){
+            elev_max=0;
+        }
+        if(elev_min==null){
+            elev_min=0;
+        }
+
+        if(potencia==null){
+            potencia=0;
+        }
+
+        
+        if (fecha != null && fecha != "") {
+            fecha = fecha.substr(0, 10);
+            hora =fecha.substr(12,20);
+            console.log(hora)
+            fecha = moment(fecha, 'YYYY-MM-DD').format('DD/MM/YYYY');
+            
+        }
+
+        var entrenoFila=`<div class="card alert-info col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="card-header alert-primary">
+                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class=" col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                        <img src="`+imgSport+`" class="imgSportId"/>
+                    </div>
+                    <div class=" col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                        <h2>`+name+`</h2><br>
+                        <b>`+description+`</b>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body alert-success">
+                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        Fecha: `+fecha+`<br>
+                        Hora: `+hora+`
+                    </div>
+                    <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        Distancia: `+distancia+` km<br>
+                    </div>
+                    <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        Tiempo Total: `+tiempototal+` min<br>
+                        Tiempo Movi: `+tiempomovi+` min<br>
+                    </div>                    
+                </div>
+                <br>
+
+                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        Vel Media: `+velmedia+` km/h<br>
+                        Vel Maxima: `+velmax+` km/h
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        Fc media: `+fcmedia+` bpm<br>
+                        Fc Maxima: `+fcmax+` bpm<br>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        Potencia: `+potencia+` w<br>
+                        Cadencia: <br>
+                    </div>           
+                </div>
+                <br>
+                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        Calorias: `+calories+` kcal<br>
+                    
+                    </div>
+                    <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        Elev Max: `+elev_max+`m<br>
+                        Elev min: `+elev_min+`m<br>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <button class="btn btn-sm btn-success" style="min-width: 150px; margin-bottom:10px">Laps Personales</button><br>
+                        <button class="btn btn-sm btn-info" style="min-width: 150px">Laps Strava</button>
+                    </div>           
+                </div> 
+            </div> 
+        
+        </div>`
+
+        $("#actividad").append(entrenoFila);
+
+    }).catch(function (error) {
         $.notify("Ha ocurrido un error al obtener el entreno" + error, "error")
     })
 
@@ -176,15 +312,15 @@ function logout() {
 
     let url = "https://www.strava.com/oauth/deauthorize?access_token=" + token;
     fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
+        method: 'post',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
 
 
-        }).then(res => res.json())
-        .then(function(res) {
+    }).then(res => res.json())
+        .then(function (res) {
 
             $("#login").show();
             $("#logout").hide();
@@ -194,7 +330,7 @@ function logout() {
             $.notify("Sesion finalizada", "success")
 
 
-        }).catch(function(error) {
+        }).catch(function (error) {
             alert("Ha ocurrido un error al desautorizar aplicacion" + error, "error");
         });
 
