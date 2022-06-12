@@ -1,7 +1,7 @@
     .verMenu {
         display: block !important;
     }
-    
+
     .card-header-activity {
         border-radius: 6px;
         font-size: 16px !important;
@@ -11,14 +11,14 @@
         background-color: rgb(179, 202, 245) !important;
         color: white;
     }
-    
+
     .card-sport {
         font-size: 10px !important;
         background-color: rgb(224, 233, 250) !important;
         margin-right: 0px;
         margin-top: 5px !important;
     }
-    
+
     .card-sport:hover {
         font-size: 10px !important;
         background-color: rgb(224, 233, 250) !important;
@@ -26,23 +26,24 @@
         margin-top: 5px !important;
         box-shadow: black 0px 0px 2px 0px;
     }
-    
+
     .imgSport {
         height: 50px;
         width: 50px;
         border-radius: 3px;
         margin-right: 10px;
     }
+
     .imgSportId {
         height: 100px;
         width: 100px;
         border-radius: 3px;
     }
-    
+
     .ocultar {
         display: none !important;
     }
-    
+
 
     #actividades {
         overflow-y: scroll;

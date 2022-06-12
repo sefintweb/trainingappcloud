@@ -12,6 +12,9 @@ const redirectUri = "http://" + dominio
 
 console.log(redirectUri);
 
+
+
+
 // redireccion la app a la pagina de authorizacion de strava
 function getAuthRedirect() {
 
@@ -125,8 +128,8 @@ function getEntrenos() {
 
                 }
 
-                if(potencia==null){
-                    potencia=0;
+                if (potencia == null) {
+                    potencia = 0;
                 }
                 let filaActividad = `<div class="card card-sport alert-info  col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                             
@@ -185,116 +188,208 @@ function getEntrenoId(Id) {
         var type = entreno.type;
         var imgSport = imagenSport(type);
         var description = entreno.description;
-        if(description==null){
-            description="Sin descripcion";
+        if (description == null) {
+            description = "Sin descripcion";
         }
         var fecha = entreno.start_date_local;
         var hora;
 
         var distancia = entreno.distance / 1000;
         distancia = distancia.toFixed(2)
-        
+
         var tiempototal = entreno.elapsed_time / 60;
         tiempototal = tiempototal.toFixed(2)
 
         var tiempomovi = entreno.moving_time / 60;
         tiempomovi = tiempomovi.toFixed(2)
-        
-        
+
+
         var velmedia = entreno.average_speed * 3.6;
         velmedia = velmedia.toFixed(2)
 
         var velmax = entreno.max_speed * 3.6;
         velmax = velmax.toFixed(2)
 
-        var calories = entreno.calories;        
+        var calories = entreno.calories;
         let potencia = entreno.average_watts;
+        potencia = potencia.toFixed(0);
         let fcmedia = entreno.average_heartrate;
+        fcmedia = fcmedia.toFixed(0)
         let fcmax = entreno.max_heartrate;
-        
+        fcmax = fcmax.toFixed(0)
+
         let elev_max = entreno.elev_high;
-        let elev_min =entreno.elev_low;
-        if(elev_max==null){
-            elev_max=0;
+        let elev_min = entreno.elev_low;
+        let total_elev = entreno.total_elevation_gain;
+        if (elev_max == null) {
+            elev_max = 0;
         }
-        if(elev_min==null){
-            elev_min=0;
+        if (elev_min == null) {
+            elev_min = 0;
+        }
+        if (total_elev == null) {
+            total_elev = 0;
         }
 
-        if(potencia==null){
-            potencia=0;
+        if (potencia == null) {
+            potencia = 0;
         }
 
-        
+
         if (fecha != null && fecha != "") {
             fecha = fecha.substr(0, 10);
-            hora =fecha.substr(12,20);
+            hora = fecha.substr(12, 20);
             console.log(hora)
             fecha = moment(fecha, 'YYYY-MM-DD').format('DD/MM/YYYY');
-            
+
         }
 
-        var entrenoFila=`<div class="card alert-info col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <div class="card-header alert-primary">
-                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class=" col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                        <img src="`+imgSport+`" class="imgSportId"/>
-                    </div>
-                    <div class=" col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                        <h2>`+name+`</h2><br>
-                        <b>`+description+`</b>
-                    </div>
-                </div>
-            </div>
+        var laps = entreno.laps;
+        var lapsDiv = "";
+        if (laps != null) {
+
+
+            lapsDiv += `
+                    <table class="table table-responsive table-hover">
+                    <thead class="table-header">
+                        <th>Lap</th>
+                        <th>Tiempo Total</th>
+                        <th>Tiempo Movi</th>
+                        <th>Distancia</th>
+                        <th>Vel Media</th>
+                        <th>Vel Max</th>
+                        <th>Fc Media</th>
+                        <th>Fc Max</th>
+                        <th>Pot Media</th>
+                    </thead><tbody id="tablelaps">`;
+
+            laps.forEach((data, indice) => {
+                let name = data.name;
+                let tiempototal = data.elapsed_time;
+                tiempototal = tiempototal / 60;
+                tiempototal = tiempototal.toFixed(2);
+
+                let tiempomovi = data.moving_time;
+                tiempomovi = tiempomovi / 60;
+                tiempomovi = tiempomovi.toFixed(1)
+
+                let distance = data.distance;
+                if (distance != null) {
+                    distance = distance / 1000;
+                }
+                else {
+                    distance = 0;
+                }
+
+                let velmedia = data.average_speed * 3.6;
+                velmedia = velmedia.toFixed(1);
+
+                let velmax = data.max_speed * 3.6;
+                velmax = velmax.toFixed(2);
+
+                let fcmedia = data.average_heartrate;
+                fcmedia = fcmedia.toFixed(0);
+
+                let fcmax = data.max_heartrate;
+                fcmax = fcmax.toFixed(0);
+
+                let filaLaps = "";
+
+                filaLaps += `<tr>
+                    <td>`+ name + `</td>
+                    <td>`+ tiempototal + `</td>
+                    <td>`+ tiempomovi + `</td>
+                    <td>`+ distance + `</td>
+                    <td>`+ velmedia + `</td>
+                    <td>`+ velmax + `</td>
+                     <td></td>
+                     <td></td>
+                     <td></td>          
+                </tr>`;           
+
+               
+                
+
+            });
             
-            <div class="card-body alert-success">
+
+           
+
+            lapsDiv+=`</tbody></table>`;
+
+        } else {
+            var lapsDiv = "<div></div>";
+
+        }
+        alert(lapsDiv);
+
+        var entrenoFila = `<div class="card alert-info col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="card-header alert-primary">
+                                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class=" col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                                        <img src="`+ imgSport + `" class="imgSportId"/>
+                                    </div>
+                                    <div class=" col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                                        <h2>`+ name + `</h2><br>
+                                        <b>`+ description + `</b>
+                                    </div>
+                                </div>
+                            </div>
+            
+            <div class="card-body">
                 <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        Fecha: `+fecha+`<br>
-                        Hora: `+hora+`
+                        Fecha: `+ fecha + `<br>
+                        Hora: `+ hora + `
                     </div>
                     <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        Distancia: `+distancia+` km<br>
+                        Distancia: `+ distancia + ` km<br>
                     </div>
                     <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        Tiempo Total: `+tiempototal+` min<br>
-                        Tiempo Movi: `+tiempomovi+` min<br>
+                        Tiempo Total: `+ tiempototal + ` min<br>
+                        Tiempo Movi: `+ tiempomovi + ` min<br>
                     </div>                    
                 </div>
                 <br>
 
                 <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        Vel Media: `+velmedia+` km/h<br>
-                        Vel Maxima: `+velmax+` km/h
+                        Vel Media: `+ velmedia + ` km/h<br>
+                        Vel Maxima: `+ velmax + ` km/h
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        Fc media: `+fcmedia+` bpm<br>
-                        Fc Maxima: `+fcmax+` bpm<br>
+                        Fc media: `+ fcmedia + ` bpm<br>
+                        Fc Maxima: `+ fcmax + ` bpm<br>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        Potencia: `+potencia+` w<br>
+                        Potencia: `+ potencia + ` w<br>
                         Cadencia: <br>
                     </div>           
                 </div>
                 <br>
                 <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        Calorias: `+calories+` kcal<br>
+                        Calorias: `+ calories + ` kcal<br>
+                        Total Elev: `+ total_elev + `m
                     
                     </div>
                     <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        Elev Max: `+elev_max+`m<br>
-                        Elev min: `+elev_min+`m<br>
+                        Elev Max: `+ elev_max + `m<br>
+                        Elev min: `+ elev_min + `m<br>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <button class="btn btn-sm btn-success" style="min-width: 150px; margin-bottom:10px">Laps Personales</button><br>
-                        <button class="btn btn-sm btn-info" style="min-width: 150px">Laps Strava</button>
+                        
+                        <button id="lapsPersonales" data-trigger="click" data-toggle="popover" data-html="true" data-placement="bottom" data-container="body" class="btn btn-sm btn-success" style="min-width: 150px; margin-bottom:10px" data-content="`+lapsDiv+`">Laps Personales</button><br>
+                       
+                        <button id="lapsStrava" data-trigger="click" data-toggle="popover" data-html="true" data-placement="bottom" class="btn btn-sm btn-success" data-container="body" style="min-width: 150px; margin-bottom:10px" data-content="Prueba de laps">Laps Strava</button>
+                       
+                        
                     </div>           
                 </div> 
+               
             </div> 
         
-        </div>`
+        </div>`;
 
         $("#actividad").append(entrenoFila);
 
@@ -339,3 +434,8 @@ function logout() {
 
 
 }
+
+$(function(){
+    
+})
+
