@@ -6,14 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrainingAppCloud</title>
-    <link rel="stylesheet" href="estilos/app.css">
+    <link rel="stylesheet" href="app.css">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"
+        integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -21,10 +30,10 @@
     <script src="notify.min.js"></script>
 
     <script src="stravaApi.js"></script>
-  <!-- <script src="polarApi.js"></script>-->
+    <!-- <script src="polarApi.js"></script>-->
 
     <script>
-        $(function() {
+        $(function () {
 
             var access_token = sessionStorage.getItem('access_token');
             var auth_token = sessionStorage.getItem('auth_token');
@@ -56,7 +65,7 @@
             }
 
 
-       /*      $("#lapsPersonales").popover(); */
+            /*      $("#lapsPersonales").popover(); */
 
 
 
@@ -83,7 +92,7 @@
         function entrenamientos() {
             var num = sessionStorage.getItem('num');
             if (num == 1) {
-                alert(num)
+
                 getEntrenos();
             }
             if (num == 2) {
@@ -113,7 +122,8 @@
 
     <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
         <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+                aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
@@ -123,14 +133,17 @@
                         <a class="nav-link active" aria-current="page" href="/index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a id="actividadNew" data-toggle="modal" data-target="#exampleModal" class="nav-link" href="#" onclick=" " style="display: none;">Nueva actividad</a>
+                        <a id="actividadNew" data-toggle="modal" data-target="#exampleModal" class="nav-link" href="#"
+                            onclick=" " style="display: none;">Nueva actividad</a>
                     </li>
 
                     <li class="nav-item">
-                        <a id="entrenos" class="nav-link" href="#" onclick="entrenamientos(); " style="display: none ;">Entrenos</a>
+                        <a id="entrenos" class="nav-link" href="#" onclick="entrenamientos(); "
+                            style="display: none ;">Entrenos</a>
                     </li>
                     <li class="nav-item">
-                        <a id="graficos" class="nav-link" href="#" onclick="verGraficos(); " style="display: none ;">Graficos</a>
+                        <a id="graficos" class="nav-link" href="#" onclick="verGraficos(); "
+                            style="display: none ;">Graficos</a>
                     </li>
                     <li class="nav-item">
                         <a id="perfil" class="nav-link" href="#" onclick="getPerfil();" style="display:none">Perfil</a>
@@ -166,13 +179,10 @@
 
         <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 row ">
 
-            <div class="col-xs-12 col-sm-12 col-lg-4 col-md-4 ">
-                <div id="actividades " class="row " style="margin-top:10px ">
-
-                </div>
+            <div id="actividades" class="col-xs-12 col-sm-12 col-lg-4 col-md-4 row " style="margin-top:10px">
 
             </div>
-            <div id="actividad " class="col-xs-12 col-sm-12 col-md-8 col-lg-8 " style="margin-top: 10px; ">
+            <div id="actividad" class="col-xs-12 col-sm-12 col-md-8 col-lg-8 " style="margin-top: 10px; ">
 
             </div>
 
@@ -180,7 +190,7 @@
     </div>
 
 
-  <!--  <div id="divgraficos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: none;">
+    <!--  <div id="divgraficos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: none;">
         <canvas id="myChart" width="400" height="100">
         </canvas>
 
@@ -226,82 +236,95 @@
     <!-- Button trigger modal -->
 
     <!-- Modal -->
-    <div class="modal fade " id="exampleModal " tabindex="-1 " role="dialog " aria-labelledby="modalActividad " aria-hidden="true ">
-        <div class="modal-dialog" role="document ">
-            <div class="modal-content ">
-                <div class="modal-header bg-primary ">
-                    <center>
-                        <h5 class="modal-title " id="modalActividad ">Nueva Actividad</h5>
-                    </center>
-                    <button type="button " class="close " data-dismiss="modal " aria-label="Close ">
-                        <span aria-hidden="true ">&times;</span>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nueva Actividad</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body ">
+                <div class="modal-body">
                     <div class="card alert-info ">
                         <div class="card-body ">
                             <div class="formularioActividad col-xs-12 col-sm-12 col-lg-12 col-md-12 ">
-                                <form action="javascript:crearActividad(); " method="post " class=" " style="font-size:12px; font-weight: bold ; ">
+                                <form action="javascript:crearActividad(); " method="post " class=" "
+                                    style="font-size:12px; font-weight: bold ; ">
                                     <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12 row ">
                                         <div class="col-xs-12 col-sm-12 col-lg-6 col-md-6 ">
+                                            <!--Canoeing, Crossfit, EBikeRide, Elliptical, Golf, Handcycle, Hike, IceSkate, InlineSkate, Kayaking, Kitesurf, NordicSki, Ride, RockClimbing, RollerSki, Rowing, Run, Sail, Skateboard, Snowboard, Snowshoe, Soccer, StairStepper, StandUpPaddling, Surfing, Swim, Velomobile, VirtualRide, VirtualRun, Walk, WeightTraining, Wheelchair, Windsurf, Workout, Yoga-->
                                             <div class="form-group ">
                                                 <label for=" ">Deporte</label>
-                                                <select class="form-control " name=" " id=" " required>
-                                                    <option value="swim ">Natacion</option>
-                                                    <option value="Ride ">Ciclismo</option>
-                                                    <option value="Run ">Carrera a pie</option>
-                                                    <option value="Workout ">Gimnasio</option>
-                                                    <option value="Yoga ">Yoga</option>
+                                                <select class="form-control " name=" " id="type" required>
+                                                    <option value="Swim">Natacion</option>
+                                                    <option value="Ride">Ciclismo de ruta</option>
+                                                    <option value="VirtualRide">Ciclismo indoor</option>
+                                                    <option value="RockClimbing">Correr en montaña</option>
+                                                    <option value="Run">Carrera a pie</option>
+                                                    <option value="Walk">Caminar</option>
+                                                    <option value="Workout">Gimnasio</option>
+                                                    <option value="Yoga">Yoga</option>
                                                 </select>
-                                                <small id="helpId " class="form-text text-muted ">Seleccione</small>
+                                                <small id="helpId " class="form-text text-muted ">Seleccione actividad</small>
                                             </div>
                                             <div class="form-group ">
                                                 <label for=" ">Nombre</label>
-                                                <input type="text " class="form-control " name=" " id=" " aria-describedby="helpId " placeholder=" " requiered>
+                                                <input type="text " class="form-control" name="" id="name"
+                                                    aria-describedby="helpId " placeholder=" " requiered>
                                                 <small id="helpId " class="form-text text-muted ">Ingrese nombre</small>
                                             </div>
-                                            <div class="form-group ">
-                                                <label for=" ">Fecha</label>
-                                                <input type="date " class="form-control " name=" " id=" " aria-describedby="helpId " placeholder=" " min="javascript:today() " required>
-                                                <small id="helpId " class="form-text text-muted ">Seleccion
-                                                    Fecha</small><br>
-
-                                                <label for=" ">Hora</label>
-                                                <input type="time " format="HH:MM " class="form-control " name=" " id=" " aria-describedby="helpId " placeholder=" " value="07:00 ">
-                                                <small id="helpId " class="form-text text-muted ">HH:MM</small>
+                                            <div class="form-group">
+                                                <label for="">Fecha</label>
+                                                <input type="date" class="form-control" name="" id="fecha"
+                                                    aria-describedby="helpId" placeholder="">
+                                                <small id="helpId" class="form-text text-muted">Ingrese fecha</small>
+                                                <label for="">Hora</label>
+                                                <input type="time" class="form-control" name="" id="hora"
+                                                    aria-describedby="helpId" placeholder="">
+                                                <small id="helpId" class="form-text text-muted">Ingrese hora</small>
                                             </div>
+
+
 
                                             <div class="form-group ">
                                                 <label for=" ">Descripcion</label>
-                                                <textarea class="form-control " name=" " id=" " rows="3 "></textarea>
+                                                <textarea class="form-control " name=" " id="description" rows="3 "></textarea>
                                             </div>
                                         </div>
 
                                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 ">
                                             <div class="form-group ">
                                                 <label for=" ">Distancia (km)</label>
-                                                <input type="text " class="form-control " name=" " id=" " aria-describedby="helpId " placeholder=" ">
-                                                <small id="helpId " class="form-text text-muted ">Help text</small>
+                                                <input type="text " class="form-control " name="" id="distance"
+                                                    aria-describedby="helpId " placeholder=" ">
+                                                <small id="helpId " class="form-text text-muted ">Ingrese distancia en km</small>
                                             </div>
                                             <div class="form-group ">
                                                 <label for=" ">Tiempo</label>
-                                                <input type="time " value="01:00:00 " format="HH:MM:SS " step="1 " class="form-control " name=" " id=" " aria-describedby="helpId " placeholder=" ">
-                                                <small id="helpId " class="form-text text-muted ">Help text</small>
+                                                <input type="time" value="01:00:00" format="HH:MM:SS " step="1 "
+                                                    class="form-control " name=" " id="elapsed_time" aria-describedby="helpId "
+                                                    placeholder=" ">
+                                                <small id="helpId " class="form-text text-muted ">Ingrese tiempo en hh:mm</small>
                                             </div>
                                             <div class="form-group ">
-                                                <label for=" ">FcMedia</label>
-                                                <input type="number " max="230 " min="30 " class="form-control " name=" " id=" " aria-describedby="helpId " placeholder=" ">
-                                                <small id="helpId " class="form-text text-muted ">Help text</small>
+                                                <label for="">FcMedia</label>
+                                                <input type="number" max="230 " min="30 " class="form-control "
+                                                    name=" " id="average_heartrate" aria-describedby="helpId " placeholder=" "/>
+                                                <small id="helpId " class="form-text text-muted ">Frecuencia cardiaca media</small>
                                             </div>
                                             <div class="form-group ">
-                                                <label for=" ">FcMax</label>
-                                                <input type="number " max="230 " min="30 " class="form-control " name=" " id=" " aria-describedby="helpId " placeholder=" ">
-                                                <small id="helpId " class="form-text text-muted ">Help text</small>
+                                                <label for="">FcMax</label>
+                                                <input type="number" max="230 " min="30 " class="form-control "
+                                                    name=" " id="max_heartrate" aria-describedby="helpId " placeholder=""/>
+                                                <small id="helpId " class="form-text text-muted ">Frecuencia cardiaca maxima</small>
                                             </div>
-                                            <div class="form-group ">
-                                                <label for=" ">Potencia</label>
-                                                <input type="number " class="form-control " name=" " id=" " aria-describedby="helpId " placeholder=" " required>
-                                                <small id="helpId " class="form-text text-muted ">Ingrese potencia</small>
+                                            <div class="form-group">
+                                              <label for="">Potencia</label>
+                                              <input type="number" class="form-control" name="" id="potencia" aria-describedby="helpId" placeholder="">
+                                              <small id="helpId" class="form-text text-muted">Potencia media</small>
                                             </div>
                                         </div>
                                     </div>
@@ -317,11 +340,11 @@
 
                     </div>
                 </div>
+                <div class="modal-footer">
 
+                </div>
             </div>
-
         </div>
-    </div>
     </div>
 
 

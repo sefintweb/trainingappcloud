@@ -18,7 +18,7 @@ console.log(redirectUri);
 // redireccion la app a la pagina de authorizacion de strava
 function getAuthRedirect() {
 
-    window.location.href = "https://www.strava.com/oauth/authorize?client_id=" + client_id + "&redirect_uri=" + redirectUri + "&response_type=code&scope=activity:read_all";
+    window.location.href = "https://www.strava.com/oauth/authorize?client_id=" + client_id + "&redirect_uri=" + redirectUri + "&response_type=code&scope=activity:write,read_all";
 
 }
 
@@ -31,21 +31,21 @@ function getTokenAccess() {
     const url = 'https://www.strava.com/oauth/token?client_id=' + client_id + '&client_secret=' + client_secret + '&code=' + auth_token + '&grant_type=authorization_code';
 
     fetch(url, {
-            method: 'post',
-            // mode: 'no-cors',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            }
+        method: 'post',
+        // mode: 'no-cors',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
 
-        }).then(res => res.json())
-        .then(function(res) {
+    }).then(res => res.json())
+        .then(function (res) {
             sessionStorage.setItem('access_token', res.access_token) // para obtener las consultas de la api
             sessionStorage.setItem('datosiniciales', JSON.stringify(res))
             window.location.href = "http://" + dominio
 
         })
-        .catch(function(error) {
+        .catch(function (error) {
 
             $.notify("Ha ocurrido un error al obtener acceso de token " + error, "error");
 
@@ -78,7 +78,7 @@ function getEntrenos() {
 
 
     var access_token = sessionStorage.getItem('access_token')
-        // alert(access_token)
+    // alert(access_token)
     const url = "https://www.strava.com/api/v3/athlete/activities?page=1&per_page=18&access_token=" + access_token;
 
     fetch(url, {
@@ -87,7 +87,7 @@ function getEntrenos() {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }
-    }).then(res => res.json()).then(function(res) {
+    }).then(res => res.json()).then(function (res) {
 
         var entrenos = res;
 
@@ -100,11 +100,26 @@ function getEntrenos() {
             entrenos.forEach(entreno => {
                 var id = entreno.id;
                 var distancia = entreno.distance / 1000;
-                distancia = distancia.toFixed(2)
+                if(distancia!=null){
+                    distancia = distancia.toFixed(2)
+                }else{
+                    distancia=0;
+                }
+               
                 var tiempo = entreno.elapsed_time / 60;
-                tiempo = tiempo.toFixed(2)
+                if(tiempo==null){
+                    tiempo=0;
+                }else{
+                    tiempo = tiempo.toFixed(2)
+                }
+                
                 var vel = entreno.average_speed * 3.6;
-                vel = vel.toFixed(2)
+                if(vel==null){
+                    vel=0;
+                }else{
+                    vel = vel.toFixed(2)
+                }
+                
                 var tipo = entreno.type;
                 var img = imagenSport(tipo)
                 let fecha = entreno.start_date;
@@ -120,6 +135,13 @@ function getEntrenos() {
 
                 if (potencia == null) {
                     potencia = 0;
+                }
+                if(fcmax==null){
+                    fcmedia=0;
+                }
+
+                if(fcmax==null){
+                    fcmax=0;
                 }
                 let filaActividad = `<div class="card card-sport  col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                             
@@ -149,7 +171,7 @@ function getEntrenos() {
         }
 
 
-    }).catch(function(error) {
+    }).catch(function (error) {
 
         $.notify("Ha ocurrido un error al obtener entrenos de strava " + error, "error");
     });
@@ -170,10 +192,9 @@ function getEntrenoId(Id) {
             'Content-Type': 'application/json'
         },
 
-    }).then(res => res.json()).then(function(resp) {
+    }).then(res => res.json()).then(function (resp) {
 
         var entreno = resp;
-
         var name = entreno.name;
         var type = entreno.type;
         var imgSport = imagenSport(type);
@@ -185,32 +206,76 @@ function getEntrenoId(Id) {
         var hora;
 
         var distancia = entreno.distance / 1000;
-        distancia = distancia.toFixed(2)
+        if (distancia == null) {
+            distancia = 0;
+        } else {
+            distancia = distancia.toFixed(2)
+        }
 
         var tiempototal = entreno.elapsed_time / 60;
-        tiempototal = tiempototal.toFixed(2)
+        if (tiempototal == null) {
+            tiempototal = 0;
+        } else {
+            tiempototal = tiempototal.toFixed(2)
+        }
 
         var tiempomovi = entreno.moving_time / 60;
-        tiempomovi = tiempomovi.toFixed(2)
+        if (tiempomovi == null) {
+            tiempomovi = 0;
+        } else {
+            tiempomovi = tiempomovi.toFixed(2)
+        }
+
 
 
         var velmedia = entreno.average_speed * 3.6;
-        velmedia = velmedia.toFixed(2)
+        if (velmedia == null) {
+            velmedia = 0;
+        } else {
+            velmedia = velmedia.toFixed(2)
+        }
+
 
         var velmax = entreno.max_speed * 3.6;
-        velmax = velmax.toFixed(2)
+        if (velmax == null) {
+            velmax = 0;
+        } else {
+            velmax = velmax.toFixed(2)
+        }
+
 
         var calories = entreno.calories;
+        if (calories == null) {
+            calories = 0
+        }
+
         let potencia = entreno.average_watts;
-        potencia = potencia.toFixed(0);
+        if (potencia == null) {
+            potencia = 0;
+        } else {
+            potencia = potencia.toFixed(0);
+        }
+
+
         let fcmedia = entreno.average_heartrate;
-        fcmedia = fcmedia.toFixed(0)
+        if (fcmedia == null) {
+            fcmedia = 0;
+        } else {
+            fcmedia = fcmedia.toFixed(0)
+        }
+
         let fcmax = entreno.max_heartrate;
-        fcmax = fcmax.toFixed(0)
+        if(fcmax==null){
+            fcmax=0;
+        }else{
+            fcmax= fcmax.toFixed(0)
+        }
+      
 
         let elev_max = entreno.elev_high;
         let elev_min = entreno.elev_low;
         let total_elev = entreno.total_elevation_gain;
+
         if (elev_max == null) {
             elev_max = 0;
         }
@@ -221,16 +286,11 @@ function getEntrenoId(Id) {
             total_elev = 0;
         }
 
-        if (potencia == null) {
-            potencia = 0;
-        }
-
-
         if (fecha != null && fecha != "") {
-            fecha = fecha.substr(0, 10);
-            hora = fecha.substr(12, 20);
+            fechacorta = fecha.substr(0, 10);
+            hora = fecha.substr(12, 18);
             console.log(hora)
-            fecha = moment(fecha, 'YYYY-MM-DD').format('DD/MM/YYYY');
+            fecha = moment(fechacorta, 'YYYY-MM-DD').format('DD/MM/YYYY');
 
         }
 
@@ -252,16 +312,33 @@ function getEntrenoId(Id) {
                         <th>Fc Max</th>
                         <th>Pot Media</th>
                     </thead><tbody id="tablelaps">`;
+            if (laps != null) {
 
+            }
             laps.forEach((data, indice) => {
+
                 let name = data.name;
                 let tiempototal = data.elapsed_time;
-                tiempototal = tiempototal / 60;
-                tiempototal = tiempototal.toFixed(2);
+                if (tiempototal != null) {
+
+                    tiempototal = tiempototal / 60;
+                    tiempototal = tiempototal.toFixed(2);
+                }
+                else {
+                    tiempototal = 0;
+                }
+
 
                 let tiempomovi = data.moving_time;
-                tiempomovi = tiempomovi / 60;
-                tiempomovi = tiempomovi.toFixed(1)
+                if (tiempomovi != null) {
+                    tiempomovi = tiempomovi / 60;
+                    tiempomovi = tiempomovi.toFixed(1)
+
+                }
+                else {
+                    tiempomovi = 0;
+                }
+
 
                 let distance = data.distance;
                 if (distance != null) {
@@ -272,16 +349,37 @@ function getEntrenoId(Id) {
                 }
 
                 let velmedia = data.average_speed * 3.6;
-                velmedia = velmedia.toFixed(1);
+
+                if (velmedia != null) {
+                    velmedia = velmedia.toFixed(1);
+                } else {
+                    velmedia = 0;
+                }
+
 
                 let velmax = data.max_speed * 3.6;
-                velmax = velmax.toFixed(2);
+                if (velmax != null) {
+                    velmax = velmax.toFixed(1);
+                } else {
+                    velmax = 0;
+                }
 
                 let fcmedia = data.average_heartrate;
-                fcmedia = fcmedia.toFixed(0);
+
+                if (fcmedia != null) {
+                    fcmedia = fcmedia.toFixed(0);
+                } else {
+                    fcmedia = 0;
+                }
+
 
                 let fcmax = data.max_heartrate;
-                fcmax = fcmax.toFixed(0);
+
+                if (fcmax != null) {
+                    fcmax = fcmax.toFixed(0);
+                } else {
+                    fcmax = 0;
+                }
 
                 let potencia = data.average_watts;
                 if (potencia != null) {
@@ -333,7 +431,7 @@ function getEntrenoId(Id) {
                 <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
                         <b>Fecha:</b> ` + fecha + `<br>
-                        <b>Hora: </b>` + hora + `
+                        <b>Hora:</b>${hora}
                     </div>
                     <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
                         <b>Distancia: </b>` + distancia + ` km<br>
@@ -381,37 +479,70 @@ function getEntrenoId(Id) {
             </div> 
         
         </div>`;
+        console.log(entrenoFila)
 
-        $("#actividad").append(entrenoFila);
+        /*  $("#actividad").append(entrenoFila); */
+        document.getElementById('actividad').innerHTML = entrenoFila;
 
-    }).catch(function(error) {
+    }).catch(function (error) {
         $.notify("Ha ocurrido un error al obtener el entreno" + error, "error")
     })
 
 
 }
 
-/*function crearActividadStrava() {
 
-    let nombre = document.getElementById('name').value;
+
+function crearActividadStrava() {
+
+    let name = document.getElementById('name').value;
+    let type = document.getElementById('type').value;
+   
     let fecha = document.getElementById('fecha').value;
-
+    alert("fecha "+fecha)
+    fecha=moment(fecha,'YYYY-MM-DD').format('DD/MM/YYYY-MM-DD HH:mm:ss')
+    let elapsed_time = document.getElementById('elapsed_time').value;
+    let horas=elapsed_time.substr(0,2);
+    let minutos=elapsed_time.substr(3,5)
+ 
+    minutos=parseInt(minutos)*60;
+    horas=parseInt(horas)*3600;
+    elapsed_time=horas+minutos;
+    
+    potencia=document.getElementById('potencia').value; 
+   
+   
+    let distance = document.getElementById('distance').value;
+    distance=distance*1000;
+    alert("Distancia"+distance);
+    
+    let description = document.getElementById('description').value;
+    
+    var access_token= sessionStorage.getItem('access_token');
+    var url="https://www.strava.com/api/v3/activities?access_token=" + access_token;
     fetch(url, {
         method: 'post',
         headers: {
-            'Accept': 'application/json, text/plain ,
+            'Accept': 'application/json, text/plain,*/*',
             'Content-Type': 'application/json'
         },
-        body: Json.stringify({
+        body: JSON.stringify({
+            'name': name,
+            'type': type,
+            'elapsed_time': elapsed_time ,
+            'start_date_local': fecha,
+            'description':description,
+            'distance': distance,
+            //'average_watts':potencia,
 
         }),
     }).then(resp => resp.json()).then(function(res) {
-
+        alert(res)
     }).catch(function(error) {
         $.notify("Ha ocurrido un error al crear la actividad", "error");
     })
 
-}*/
+}
 
 
 function logout() {
@@ -420,15 +551,15 @@ function logout() {
 
     let url = "https://www.strava.com/oauth/deauthorize?access_token=" + token;
     fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
+        method: 'post',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
 
 
-        }).then(res => res.json())
-        .then(function(res) {
+    }).then(res => res.json())
+        .then(function (res) {
 
             $("#login").show();
             $("#logout").hide();
@@ -438,14 +569,11 @@ function logout() {
             $.notify("Sesion finalizada", "success")
 
 
-        }).catch(function(error) {
-            alert("Ha ocurrido un error al desautorizar aplicacion" + error, "error");
+        }).catch(function (error) {
+            $.notify("Ha ocurrido un error al desautorizar aplicacion" + error, "error");
         });
 
     $("#home").click();
 
 }
 
-$(function() {
-
-})

@@ -433,6 +433,7 @@ function logout() {
 
 
         }).catch(function(error) {
+            alert(error);
             $.notify("Ha ocurrido un error al desautorizar aplicacion" + error, "error");
         });
 
