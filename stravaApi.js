@@ -540,7 +540,10 @@ function crearActividadStrava() {
 
         }),
     }).then(resp => resp.json()).then(function(res) {
-        alert(res)
+        
+        if(res!=null && res!=undefined) {
+            $.notify("Se ha creado la actividad con exito","success");
+        }
     }).catch(function(error) {
         $.notify("Ha ocurrido un error al crear la actividad", "error");
     })
