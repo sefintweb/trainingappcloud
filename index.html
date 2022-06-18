@@ -111,6 +111,7 @@
         }
 
         function verGraficos() {
+            $('#divgraficos').show();
 
         }
     </script>
@@ -121,7 +122,7 @@
 
 
     <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
-        <div class="container">
+        <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
                 aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -177,12 +178,12 @@
 
     <div class="container-fluid">
 
-        <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 row ">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row">
 
-            <div id="actividades" class="col-xs-12 col-sm-12 col-lg-4 col-md-4 row " style="margin-top:10px">
+            <div id="actividades" class="col-xs-12 col-sm-12 col-lg-4 col-md-4 row" style="margin-top:10px">
 
             </div>
-            <div id="actividad" class="col-xs-12 col-sm-12 col-md-8 col-lg-8 " style="margin-top: 10px; ">
+            <div id="actividad" class="col-xs-12 col-sm-12 col-md-8 col-lg-8 " style="margin-top: 10px;">
 
             </div>
 
@@ -190,11 +191,9 @@
     </div>
 
 
-    <!--  <div id="divgraficos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: none;">
+    <div id="divgraficos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: none;">
         <canvas id="myChart" width="400" height="100">
         </canvas>
-
-
     </div>
     <script>
         const ctx = document.getElementById('myChart').getContext('2d');
@@ -232,7 +231,7 @@
                 }
             }
         });
-    </script> -->
+    </script> 
     <!-- Button trigger modal -->
 
     <!-- Modal -->
@@ -277,14 +276,11 @@
                                                 <small id="helpId " class="form-text text-muted ">Ingrese nombre</small>
                                             </div>
                                             <div class="form-group">
-                                                <label for="">Fecha</label>
-                                                <input type="date" class="form-control" name="" id="fecha"
+                                                <label for="">Fecha Hora</label>
+                                                <input type="datetime-local" class="form-control" name="" id="fecha"
                                                     aria-describedby="helpId" placeholder="">
-                                                <small id="helpId" class="form-text text-muted">Ingrese fecha</small>
-                                                <label for="">Hora</label>
-                                                <input type="time" class="form-control" name="" id="hora"
-                                                    aria-describedby="helpId" placeholder="">
-                                                <small id="helpId" class="form-text text-muted">Ingrese hora</small>
+                                                <small id="helpId" class="form-text text-muted">Ingrese fecha-hora</small>
+                                               
                                             </div>
 
 
@@ -303,7 +299,7 @@
                                                 <small id="helpId " class="form-text text-muted ">Ingrese distancia en km</small>
                                             </div>
                                             <div class="form-group ">
-                                                <label for=" ">Tiempo</label>
+                                                <label for=" ">Tiempo Total</label>
                                                 <input type="time" value="01:00:00" format="HH:MM:SS " step="1 "
                                                     class="form-control " name=" " id="elapsed_time" aria-describedby="helpId "
                                                     placeholder=" ">
@@ -331,8 +327,8 @@
 
                             </div>
                             <div class="modal-footer ">
-                                <button type="button " class="btn btn-secondary " data-dismiss="modal ">Cerrar</button>
-                                <button type="submit " class="btn btn-primary ">Crear</button>
+                                <button type="reset " class="btn btn-delete" >Borrar</button>
+                                <button type="submit " class="btn btn-primary">Crear</button>
                             </div>
 
                             </form>

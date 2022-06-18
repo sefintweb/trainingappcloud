@@ -79,7 +79,7 @@ function getEntrenos() {
 
     var access_token = sessionStorage.getItem('access_token')
     // alert(access_token)
-    const url = "https://www.strava.com/api/v3/athlete/activities?page=1&per_page=18&access_token=" + access_token;
+    const url = "https://www.strava.com/api/v3/athlete/activities?page=1&per_page=30&access_token=" + access_token;
 
     fetch(url, {
         method: 'get',
@@ -89,6 +89,7 @@ function getEntrenos() {
         }
     }).then(res => res.json()).then(function (res) {
 
+        sessionStorage.setItem('entrenos',res)
         var entrenos = res;
 
         if (entrenos == "" || entrenos == null) {
@@ -193,7 +194,7 @@ function getEntrenoId(Id) {
         },
 
     }).then(res => res.json()).then(function (resp) {
-
+        sessionStorage.setItem('entrenamiento', resp)
         var entreno = resp;
         var name = entreno.name;
         var type = entreno.type;
@@ -496,11 +497,11 @@ function getEntrenoId(Id) {
 function crearActividadStrava() {
 
     let name = document.getElementById('name').value;
-    let type = document.getElementById('type').value;
-   
+    let type = document.getElementById('type').value;   
     let fecha = document.getElementById('fecha').value;
+
     alert("fecha "+fecha)
-    fecha=moment(fecha,'YYYY-MM-DD').format('DD/MM/YYYY-MM-DD HH:mm:ss')
+   // fecha=moment(fecha,'YYYY-MM-DD').format('DD/MM/YYYY-MM-DD HH:mm:ss')
     let elapsed_time = document.getElementById('elapsed_time').value;
     let horas=elapsed_time.substr(0,2);
     let minutos=elapsed_time.substr(3,5)
@@ -510,11 +511,12 @@ function crearActividadStrava() {
     elapsed_time=horas+minutos;
     
     potencia=document.getElementById('potencia').value; 
-   
-   
     let distance = document.getElementById('distance').value;
     distance=distance*1000;
-    alert("Distancia"+distance);
+
+    let fcmedia=document.getElementById('average_heartrate').value;
+    let fcmax=document.getElementById('max_heartrate').value;
+   
     
     let description = document.getElementById('description').value;
     
@@ -533,7 +535,8 @@ function crearActividadStrava() {
             'start_date_local': fecha,
             'description':description,
             'distance': distance,
-            //'average_watts':potencia,
+            'average_watts':potencia,
+            'average_heartrate':fcmedia,
 
         }),
     }).then(resp => resp.json()).then(function(res) {
@@ -567,6 +570,7 @@ function logout() {
             $("#perfil").hide()
             sessionStorage.clear();
             $.notify("Sesion finalizada", "success")
+            window.location.href=location.host;
 
 
         }).catch(function (error) {
