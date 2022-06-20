@@ -18,7 +18,7 @@ console.log(redirectUri);
 // redireccion la app a la pagina de authorizacion de strava
 function getAuthRedirect() {
 
-    window.location.href = "https://www.strava.com/oauth/authorize?client_id=" + client_id + "&redirect_uri=" + redirectUri + "&response_type=code&scope=activity:write,read_all";
+    window.location.href = "https://www.strava.com/oauth/authorize?client_id=" + client_id + "&redirect_uri=" + redirectUri + "&response_type=code&scope=activity:read_all";
 
 }
 
@@ -71,6 +71,170 @@ function imagenSport(sport) {
     return imagen;
 
 }
+function cargarVolChart(res) {
+    $("#volumenChart").empty();
+    const ctx = document.getElementById('volumenChart').getContext('2d');
+    var entrenos = res;
+    var labels = []
+    var data = [];
+    var backgroundColor=[];
+
+
+    entrenos.forEach((element, index) => {
+        var deporte = element.type;
+        var dep;
+        if(deporte == "Ride"){
+            dep="B"
+            backgroundColor[index]="blue"
+        }
+        if(deporte == "Run"){
+            dep="R"
+            backgroundColor[index]="red"
+        }
+        if(deporte == "Workout"){
+            dep="W"
+            backgroundColor[index]="green"
+        }
+        if(deporte == "Yoga"){
+            dep="Y"
+            backgroundColor[index]="pink"
+        }
+        labels[index] = dep;
+
+        var tiempo = element.elapsed_time / 60;
+        if(tiempo!= null){
+            tiempo=tiempo.toFixed(0);
+        }
+        data[index] = tiempo
+
+    });
+
+    var volumenChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Vol Actividades(min)',
+                data: data,
+                backgroundColor: backgroundColor,
+                borderColor: [
+                    'black',                  
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                   beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function cargarIntChart(res) {
+    $("#intensidadChart").empty();
+    const ctx = document.getElementById('intensidadChart').getContext('2d');
+    var entrenos = res;
+    var labels = []
+    var data1 = [];
+    var data2 = [];
+    var backgroundColor=[];
+
+
+    entrenos.forEach((element, index) => {
+       
+        var deporte= element.type;
+        var dep;
+        var potencia =element.average_watts;
+        
+        if(potencia==null){
+            potencia=0
+        }else{
+            potencia=potencia.toFixed(0)
+        }
+        
+        var fcmedia = element.average_heartrate;
+
+        if(fcmedia==null){
+            fcmedia=0;
+        }else{
+            fcmedia= fcmedia.toFixed(0)
+        }
+        
+        
+        if(deporte == "Ride"){
+            dep="B"
+            
+        }
+        if(deporte == "Run"){
+            dep="R"
+           
+        }
+        if(deporte == "Workout"){
+            dep="W"
+         
+        }
+        if(deporte == "Yoga"){
+            dep="Y"
+            
+        }
+
+        
+        labels[index] = dep;     
+        data1[index] = potencia
+        data2[index] = fcmedia
+
+    });
+
+    var intensidadChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                yAxisID: 'y',
+                label: 'Pot (watts)',
+                data: data1,
+                backgroundColor: 'green',               
+                fill: false,
+                borderWidth: 1,
+                beginAtZero: true
+               
+            },{
+                yAxisID: 'y1',
+                label: 'Fc (lpm)',
+                data: data2,
+                backgroundColor: 'red',               
+                fill: false,
+                borderWidth: 1,
+               
+            }]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            },
+            stacked: false,
+            scales: {
+                y: {
+                    
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                },
+                y1:{
+                   
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                }
+            }
+        }
+    });
+}
 
 function getEntrenos() {
 
@@ -87,11 +251,12 @@ function getEntrenos() {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }
-    }).then(res => res.json()).then(function (res) {
+    }).then(res => res.json()).then(function (resp) {
 
-        sessionStorage.setItem('entrenos',res)
-        var entrenos = res;
-
+       
+        var entrenos = resp;
+        sessionStorage.setItem('entrenos',resp)
+        
         if (entrenos == "" || entrenos == null) {
             $.notify("Sin entrenos registrados", "info")
         } else {
@@ -171,6 +336,9 @@ function getEntrenos() {
 
         }
 
+        cargarVolChart(resp)
+        cargarIntChart(resp)
+        $("#divgraficos").show();
 
     }).catch(function (error) {
 
@@ -480,7 +648,7 @@ function getEntrenoId(Id) {
             </div> 
         
         </div>`;
-        console.log(entrenoFila)
+      
 
         /*  $("#actividad").append(entrenoFila); */
         document.getElementById('actividad').innerHTML = entrenoFila;
@@ -573,7 +741,7 @@ function logout() {
             $("#perfil").hide()
             sessionStorage.clear();
             $.notify("Sesion finalizada", "success")
-            window.location.href=location.host;
+            window.location.href=location.hostname;
 
 
         }).catch(function (error) {
