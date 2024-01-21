@@ -115,6 +115,21 @@
 
         }
     </script>
+    <script>
+        function getCalendario(){
+            fetch('/calendario/index.html',{
+                method:'GET',
+               
+            }).then(res=>res.text()).
+            then(function(resp){
+                $("#apps").hide();
+                document.getElementById('contenido').innerHTML=resp;
+            }).catch(function(error){
+                $.notify('Ha ocurrido un error al obtener calendario' + error,'error')
+                //alert("Ha ocurrido un error" + error )
+            })
+        }
+    </script>
 
 </head>
 
@@ -136,6 +151,9 @@
                     <li class="nav-item">
                         <a id="actividadNew" data-toggle="modal" data-target="#exampleModal" class="nav-link" href="#"
                             onclick=" " style="display: none;">Nueva actividad</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="perfil" class="nav-link" href="#" onclick="getCalendario();" style="display:none">Calendario</a>
                     </li>
 
                     <li class="nav-item">
@@ -175,8 +193,11 @@
         </div>
     </nav>
 
+    <div id="contenido">
 
-    <div class="container-fluid">
+    </div>
+
+    <div class="container-fluid" id="apps">
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row">
 
